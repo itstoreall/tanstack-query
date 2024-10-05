@@ -17,8 +17,10 @@ const usePosts = (isEnable: boolean) => {
   const getPosts = async () =>
     await axios.get<Post[]>('https://jsonplaceholder.typicode.com/posts');
 
-  const modifyData = (data: PostData) =>
-    data.data.filter((_: Post, idx: number) => idx < 10) ?? [];
+  const modifyData = (data: PostData) => {
+    // console.log(data.data);
+    return data.data.filter((_: Post, idx: number) => idx < 10) ?? [];
+  };
 
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['posts'],
