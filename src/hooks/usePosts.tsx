@@ -2,6 +2,17 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { Post, PostData } from '../types/global';
 
+const initialData: { data: Post[] } = {
+  data: [
+    {
+      body: 'init body',
+      id: 0,
+      title: 'init Title',
+      userId: 1
+    }
+  ]
+};
+
 const usePosts = (isEnable: boolean) => {
   const getPosts = async () =>
     await axios.get<Post[]>('https://jsonplaceholder.typicode.com/posts');
@@ -13,7 +24,8 @@ const usePosts = (isEnable: boolean) => {
     queryKey: ['posts'],
     queryFn: getPosts,
     select: modifyData,
-    enabled: isEnable
+    enabled: isEnable,
+    initialData
   });
 
   return { data, error, isLoading, isSuccess };
