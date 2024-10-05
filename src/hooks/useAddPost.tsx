@@ -1,33 +1,17 @@
-import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Post } from '../types/global';
-
-// const initialData: { data: Post[] } = {
-//   data: [
-//     {
-//       body: 'init body',
-//       id: 0,
-//       title: 'init Title',
-//       userId: 1
-//     }
-//   ]
-// };
-
-const addPost = async (newPost: Omit<Post, 'id'>) =>
-  axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
+import { postService } from '../api/post.service';
 
 const useAddPost = () => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['addPost'],
-    mutationFn: addPost,
-    // mutationFn: () => addPost(newPost),
+    mutationFn: postService.addPost.bind(postService),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
       console.log('Post created successfully!');
     },
-    onError: () => console.log('Error in Post creation!')
+    onError: err => console.error('Error in Post creation!', err)
   });
 
   return { addPost: mutate, isPending };
